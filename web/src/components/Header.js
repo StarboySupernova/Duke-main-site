@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
-import styled from 'styled-components';
 import clsx from 'clsx';
 import { MdClose, MdMenu, MdSearch } from 'react-icons/md';
 import { Link } from 'gatsby';
@@ -46,18 +45,15 @@ function Header() {
     } else {
       document.body.style.overflow = 'initial';
     }
-  }, [isNavOpen]);
 
-  /* method to listen to every state change. This is typically not ideal, hence we use square brackets to ensure it only runs once */
-  useEffect(() => {
-    // adding an event listener for when the use clicks anywhere on the page. We'll then run a function every time the document is clicked.
+    // adding an event listener for when the user clicks anywhere on the page
     document.addEventListener('mousedown', handleClickOutside);
 
-    // unmounting listener such that is does not persist across multiple pages, leading to performance issues
+    // unmounting listener to prevent performance issues
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [isNavOpen]);
 
   const handleSearchModalOpen = () => {
     openSearchModal();
@@ -190,13 +186,3 @@ function Header() {
 }
 
 export default Header;
-
-// /*Display is none by default, until media query determines the screen to be iPad or less */
-
-const HamburgerWrapper = styled.div`
-  display: none;
-
-  @media (max-width: 768px) {
-    display: block;
-  }
-`;

@@ -13,7 +13,7 @@ export default function TooltipButton(props) {
   }
 
   return (
-    <a className="tooltipButton" href={item.link} onClick={item.onClick}>
+    <a className="tooltipButton" href={item.link} onClick={props.onClick}>
       <HoverWrapper
         isHover={ishover}
         onMouseEnter={() => MouseOver()}

@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'gatsby';
+import React, { useContext, useEffect, useState, useRef } from 'react';
+import styled from 'styled-components';
 import clsx from 'clsx';
 import { MdClose, MdMenu, MdSearch } from 'react-icons/md';
 import HeaderStyles from '../styles/HeaderStyles';
@@ -7,10 +7,36 @@ import Logo from './Logo';
 import ActionButton from './buttons/ActionButton';
 import { menu } from '../constants/menu';
 import { SearchModalContext } from '../contexts/searchModalContext';
+import MenuButton from './buttons/MenuButton';
 
 function Header() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const { openSearchModal } = useContext(SearchModalContext); // extracting method from context, given the extraction in SearchModal.js, it seems the extraction is dynamiccally typed, and will correspond with the property name or method name inside our context
+
+  const [isOpen, setIsOpen] =
+    useState(
+      false
+    ); /* react hook. We have option to skip importing React hook by writing React.useState */
+  const ref = useRef();
+  const tooltipRef = useRef();
+
+  function handleClick(event) {
+    setIsOpen(
+      !isOpen
+    ); /* will not toggle menu on its own because MenuButton is a custom component, and as such it assumes onClick is props instead of an event listener. Hence inside MenuButton, we need to attach to props.onClick inside the respective element (Link in this case) to respond to the onClick method passed-in in this file, and then invoke a method that prevents default behaviour when MenuButton is clicked */
+    event.preventDefault();
+  }
+
+  function handleClickOutside(event) {
+    if (
+      ref.current &&
+      !ref.current.contains(event.target) &&
+      !tooltipRef.current.contains(event.target)
+    ) {
+      console.log('Document is clicked');
+      setIsOpen(false); /* dismissing tooltip */
+    } /* conditional check to prevent conflicting events on tooltip button, such that tapping on toolitp button on this page does not trigger this method, since it already has an onclick event it is supposed to execute. Last condition ensures that clicking on the toolitp itself will not dismiss the tooltip */
+  }
 
   useEffect(() => {
     if (isNavOpen) {
@@ -19,6 +45,17 @@ function Header() {
       document.body.style.overflow = 'initial';
     }
   }, [isNavOpen]);
+
+  /* method to listen to every state change. This is typically not ideal, hence we use square brackets to ensure it only runs once */
+  useEffect(() => {
+    // adding an event listener for when the use clicks anywhere on the page. We'll then run a function every time the document is clicked.
+    document.addEventListener('mousedown', handleClickOutside);
+
+    // unmounting listener such that is does not persist across multiple pages, leading to performance issues
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleSearchModalOpen = () => {
     openSearchModal();
@@ -78,13 +115,31 @@ function Header() {
                 <MdClose />
               </ActionButton>
               <ul>
-                {menu.map((item) => (
-                  <li key={item.path}>
-                    <Link to={item.path} onClick={handleNavItemClick}>
-                      {item.title}
-                    </Link>
-                  </li>
-                ))}
+                {menu.map((item, index) =>
+                  item.path === '/account' ? (
+                    <MenuButton
+                      item={item}
+                      key={index}
+                      onClick={(event) => handleClick(event)}
+                    />
+                  ) : (
+                    <MenuButton
+                      item={item}
+                      key={index}
+                      onClick={handleNavItemClick}
+                    />
+                  )
+                )}
+                <HamburgerWrapper>
+                  <MenuButton
+                    item={{
+                      title: '',
+                      icon: '/images/icons/hamburger.svg',
+                      link: '/',
+                    }}
+                    onClick={(event) => handleClick(event)}
+                  />
+                </HamburgerWrapper>
                 <li className="searchIcon">
                   <div
                     className="searchIcon__wrapper"
@@ -106,3 +161,13 @@ function Header() {
 }
 
 export default Header;
+
+// /*Display is none by default, until media query determines the screen to be iPad or less */
+
+const HamburgerWrapper = styled.div`
+  display: none;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;

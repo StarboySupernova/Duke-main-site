@@ -30,7 +30,7 @@ export default function MenuButton(props) {
 }
 
 /* setting grid inside extant MenuWrapper columns */
-const MenuItem = styled.div`
+export const MenuItem = styled.div`
   color: rgba(255, 255, 255, 0.7);
   display: grid;
   grid-template-columns: 24px auto;

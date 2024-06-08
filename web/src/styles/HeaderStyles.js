@@ -137,5 +137,11 @@ export default styled.header`
         font-size: 2.5rem;
       }
     }
+    .menuButton {
+      color: aqua;
+    }
+    .menuItem {
+      color: aqua;
+    }
   }
 `;

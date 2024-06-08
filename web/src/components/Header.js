@@ -8,8 +8,8 @@ import Logo from './Logo';
 import ActionButton from './buttons/ActionButton';
 import { menu } from '../constants/menu';
 import { SearchModalContext } from '../contexts/searchModalContext';
-import MenuButton from './buttons/MenuButton';
 import MenuToolTip from './MenuTooltip';
+import { MenuItem } from './buttons/MenuButton';
 
 function Header() {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -124,27 +124,23 @@ function Header() {
                         to={item.path}
                         onClick={(event) => handleClick(event)}
                       >
-                        {item.title}
+                        <MenuItem title={item.title}>
+                          <img src={item.icon} alt={item.title} />
+                          {item.title}
+                        </MenuItem>
                       </Link>
                     </li>
                   ) : (
                     <li key={item.path}>
                       <Link to={item.path} onClick={handleNavItemClick}>
-                        {item.title}
+                        <MenuItem title={item.title}>
+                          <img src={item.icon} alt={item.title} />
+                          {item.title}
+                        </MenuItem>
                       </Link>
                     </li>
                   )
                 )}
-                <HamburgerWrapper>
-                  <MenuButton
-                    item={{
-                      title: '',
-                      icon: '/images/icons/hamburger.svg',
-                      link: '/',
-                    }}
-                    onClick={(event) => handleClick(event)}
-                  />
-                </HamburgerWrapper>
                 <li className="searchIcon">
                   <div
                     className="searchIcon__wrapper"

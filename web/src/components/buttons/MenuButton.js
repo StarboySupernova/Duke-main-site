@@ -40,7 +40,7 @@ export const MenuItem = styled.div`
   transition: 0.5s ease-out; /*transition should be applied to parent container & not hover state else the transition only occurs when mouse starts to hover, and not when it ends */
 `;
 
-const HoverWrapper = styled.div`
+export const HoverWrapper = styled.div`
   border-radius: ${(props) => (props.isHover ? '10px' : '0px')};
   background: ${(props) =>
     props.isHover ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.0)'};

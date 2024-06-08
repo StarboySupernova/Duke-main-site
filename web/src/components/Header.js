@@ -9,7 +9,7 @@ import ActionButton from './buttons/ActionButton';
 import { menu } from '../constants/menu';
 import { SearchModalContext } from '../contexts/searchModalContext';
 import MenuToolTip from './MenuTooltip';
-import { MenuItem } from './buttons/MenuButton';
+import { MenuItem, HoverWrapper } from './buttons/MenuButton';
 
 function Header() {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -69,6 +69,15 @@ function Header() {
     }
   };
 
+  const [ishover, setIshover] = useState(false);
+
+  function MouseOver() {
+    setIshover(true);
+  }
+  function MouseOut() {
+    setIshover(false);
+  }
+
   return (
     <HeaderStyles>
       <div className="container">
@@ -124,19 +133,31 @@ function Header() {
                         to={item.path}
                         onClick={(event) => handleClick(event)}
                       >
-                        <MenuItem title={item.title}>
-                          <img src={item.icon} alt={item.title} />
-                          {item.title}
-                        </MenuItem>
+                        <HoverWrapper
+                          isHover={ishover}
+                          onMouseEnter={() => MouseOver()}
+                          onMouseLeave={() => MouseOut()}
+                        >
+                          <MenuItem title={item.title}>
+                            <img src={item.icon} alt={item.title} />
+                            {item.title}
+                          </MenuItem>
+                        </HoverWrapper>
                       </Link>
                     </li>
                   ) : (
                     <li key={item.path}>
                       <Link to={item.path} onClick={handleNavItemClick}>
-                        <MenuItem title={item.title}>
-                          <img src={item.icon} alt={item.title} />
-                          {item.title}
-                        </MenuItem>
+                        <HoverWrapper
+                          isHover={ishover}
+                          onMouseEnter={() => MouseOver()}
+                          onMouseLeave={() => MouseOut()}
+                        >
+                          <MenuItem title={item.title}>
+                            <img src={item.icon} alt={item.title} />
+                            {item.title}
+                          </MenuItem>
+                        </HoverWrapper>
                       </Link>
                     </li>
                   )

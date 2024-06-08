@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import clsx from 'clsx';
 import { MdClose, MdMenu, MdSearch } from 'react-icons/md';
+import { Link } from 'gatsby';
 import HeaderStyles from '../styles/HeaderStyles';
 import Logo from './Logo';
 import ActionButton from './buttons/ActionButton';
@@ -116,19 +117,22 @@ function Header() {
                 <MdClose />
               </ActionButton>
               <ul>
-                {menu.map((item, index) =>
+                {menu.map((item) =>
                   item.path === '/account' ? (
-                    <MenuButton
-                      item={item}
-                      key={index}
-                      onClick={(event) => handleClick(event)}
-                    />
+                    <li key={item.path}>
+                      <Link
+                        to={item.path}
+                        onClick={(event) => handleClick(event)}
+                      >
+                        {item.title}
+                      </Link>
+                    </li>
                   ) : (
-                    <MenuButton
-                      item={item}
-                      key={index}
-                      onClick={handleNavItemClick}
-                    />
+                    <li key={item.path}>
+                      <Link to={item.path} onClick={handleNavItemClick}>
+                        {item.title}
+                      </Link>
+                    </li>
                   )
                 )}
                 <HamburgerWrapper>

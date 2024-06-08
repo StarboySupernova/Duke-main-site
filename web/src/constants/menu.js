@@ -22,9 +22,9 @@ export const menu = [
   {
     title: 'Reviews',
     icon: '/images/icons/pricing.svg',
-    path: '/account',
+    path: '/reviews',
   },
-  { title: '', icon: '/images/icons/chat.svg', link: '/review' },
+  { title: '', icon: '/images/icons/chat.svg', link: '/account' },
 ];
 
 export const tooltipData = [

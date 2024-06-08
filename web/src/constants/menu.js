@@ -27,6 +27,24 @@ export const menu = [
   { title: '', icon: '/images/icons/chat.svg', link: '/account' },
 ];
 
+export const tooltipData = [
+  {
+    title: 'Call Us',
+    icon: '/images/icons/icons8-phone-30.png',
+    link: 'tel:+27664508181',
+  },
+  {
+    title: 'WhatsApp',
+    icon: '/images/icons/icons8-whatsapp-30.png',
+    link: "https://wa.me/27664508181?text=I'm%20interested%20in%20your%20services%20at%20Duke Atlass",
+  },
+  {
+    title: 'Mail',
+    icon: '/images/icons/email.svg',
+    link: 'sakhemboza53@gmail.com',
+  },
+];
+
 // export const menuData = [
 //   {
 //     title: 'Overview',

@@ -8,6 +8,7 @@ import ActionButton from './buttons/ActionButton';
 import { menu } from '../constants/menu';
 import { SearchModalContext } from '../contexts/searchModalContext';
 import MenuButton from './buttons/MenuButton';
+import MenuToolTip from './MenuTooltip';
 
 function Header() {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -155,6 +156,13 @@ function Header() {
             </nav>
           </div>
         </div>
+      </div>
+      <div
+        ref={
+          tooltipRef
+        } /* we have to create a container around MenuToolTip to add the ref to,because one cannot attach a ref to custom components */
+      >
+        <MenuToolTip isOpen={isOpen} />
       </div>
     </HeaderStyles>
   );

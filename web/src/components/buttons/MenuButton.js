@@ -14,7 +14,7 @@ export default function MenuButton(props) {
   }
 
   return (
-    <Link to={item.link} onClick={item.onClick}>
+    <Link to={item.link} onClick={props.onClick}>
       <HoverWrapper
         isHover={ishover}
         onMouseEnter={() => MouseOver()}

@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
+import styled from 'styled-components';
 import clsx from 'clsx';
 import { MdClose, MdMenu, MdSearch } from 'react-icons/md';
 import { Link } from 'gatsby';
 import HeaderStyles from '../styles/HeaderStyles';
-import Logo from './Logo';
 import ActionButton from './buttons/ActionButton';
 import { menu } from '../constants/menu';
 import { SearchModalContext } from '../contexts/searchModalContext';
@@ -76,51 +76,56 @@ function Header() {
 
   return (
     <HeaderStyles>
-      <div className="container">
-        <div className="header__container">
-          <div className="logo">
-            <Logo />
-          </div>
-          <div className={clsx('nav__wrapper', isNavOpen && 'open')}>
-            <div className="mobileIcon">
-              <div className="searchIcon">
-                <div
-                  className="searchIcon__wrapper"
-                  onClick={handleSearchModalOpen}
-                  onKeyDown={handleSearchModalOpen}
-                  tabIndex={0}
-                  role="button"
-                >
-                  <MdSearch />
-                </div>
-              </div>
-              <ActionButton
-                className="mobileMenuBtn"
-                onKeyDown={() => setIsNavOpen(true)}
-                onClick={() => setIsNavOpen(true)}
-              >
-                <MdMenu />
-              </ActionButton>
-            </div>
-            {/* functionality to close menu upon clicking outside nav menu in mobile */}
-            {isNavOpen && (
+      <Wrapper>
+        <Link to="/" /* link to homepage */>
+          <img
+            src="/images/logos/apetech-logo.png"
+            alt="Duke Logo"
+            width="50"
+            style={{ borderRadius: '40%', position: 'relative' }}
+          />
+        </Link>
+        <div className={clsx('nav__wrapper', isNavOpen && 'open')}>
+          <div className="mobileIcon">
+            <div className="searchIcon">
               <div
-                aria-label="Close Menu"
-                role="button"
+                className="searchIcon__wrapper"
+                onClick={handleSearchModalOpen}
+                onKeyDown={handleSearchModalOpen}
                 tabIndex={0}
-                className="mobileNavBg"
-                onKeyDown={() => setIsNavOpen(false)}
-                onClick={() => setIsNavOpen(false)}
-              />
-            )}
-            <nav>
-              <ActionButton
-                className="mobileMenuCloseBtn"
-                onClick={() => setIsNavOpen(false)}
-                onKeyDown={() => setIsNavOpen(false)}
+                role="button"
               >
-                <MdClose />
-              </ActionButton>
+                <MdSearch />
+              </div>
+            </div>
+            <ActionButton
+              className="mobileMenuBtn"
+              onKeyDown={() => setIsNavOpen(true)}
+              onClick={() => setIsNavOpen(true)}
+            >
+              <MdMenu />
+            </ActionButton>
+          </div>
+          {/* functionality to close menu upon clicking outside nav menu in mobile */}
+          {isNavOpen && (
+            <div
+              aria-label="Close Menu"
+              role="button"
+              tabIndex={0}
+              className="mobileNavBg"
+              onKeyDown={() => setIsNavOpen(false)}
+              onClick={() => setIsNavOpen(false)}
+            />
+          )}
+          <nav>
+            <ActionButton
+              className="mobileMenuCloseBtn"
+              onClick={() => setIsNavOpen(false)}
+              onKeyDown={() => setIsNavOpen(false)}
+            >
+              <MdClose />
+            </ActionButton>
+            <MenuWrapper count={menu.length} ref={ref}>
               <ul>
                 {menu.map((item) =>
                   item.path === '/account' ? (
@@ -170,19 +175,76 @@ function Header() {
                   </div>
                 </li>
               </ul>
-            </nav>
-          </div>
+            </MenuWrapper>
+            <div
+              ref={
+                tooltipRef
+              } /* we have to create a container around MenuToolTip to add the ref to,because one cannot attach a ref to custom components */
+            >
+              <MenuToolTip isOpen={isOpen} />
+            </div>
+            <li className="searchIcon">
+              <div
+                className="searchIcon__wrapper"
+                onClick={handleSearchModalOpen}
+                onKeyDown={handleSearchModalOpen}
+                tabIndex={0}
+                role="button"
+              >
+                <MdSearch />
+              </div>
+            </li>
+          </nav>
         </div>
-      </div>
-      <div
-        ref={
-          tooltipRef
-        } /* we have to create a container around MenuToolTip to add the ref to,because one cannot attach a ref to custom components */
-      >
-        <MenuToolTip isOpen={isOpen} />
-      </div>
+        <div
+          ref={
+            tooltipRef
+          } /* we have to create a container around MenuToolTip to add the ref to,because one cannot attach a ref to custom components */
+        >
+          <MenuToolTip isOpen={isOpen} />
+        </div>
+      </Wrapper>
     </HeaderStyles>
   );
 }
 
 export default Header;
+
+const Wrapper = styled.div`
+  position: absolute;
+  top: 60px;
+  display: grid;
+  grid-template-columns: 44px auto;
+  justify-content: space-between;
+  width: 100%; /*when you set position absolute it tends not to take the full width, hence we need to explictly specify width */
+  padding: 0 30px;
+  align-items: center; /*vertically center items within their respective columns*/
+
+  @media (max-width: 768px) {
+    top: 30px;
+  }
+
+  @media (max-width: 450px) {
+    top: 20px;
+    padding: 0 20px;
+  }
+`;
+
+const MenuWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(
+    ${(props) => props.count},
+    auto
+  ); /*first arg is the number of columns, with 2nd arg being the value for each column. Instead of writing auto, auto, auto (for example) */
+  gap: 30px;
+
+  /*this only applies when width is less than 768 */
+  @media (max-width: 768px) {
+    /*CSS selector for anything greater than the immediate children which is an anchor (MenuButton here) */
+    > a {
+      display: none;
+    }
+
+    grid-template-columns: auto;
+  }
+`;
